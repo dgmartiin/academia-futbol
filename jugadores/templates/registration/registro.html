@@ -1,0 +1,237 @@
+```html
+{% extends 'base.html' %}
+
+{% block title %}
+    Crear cuenta
+{% endblock %}
+
+{% block contenido %}
+
+<style>
+
+    .registro-container {
+        max-width: 450px;
+        margin: 40px auto;
+    }
+
+    .registro-card {
+        background: linear-gradient(145deg, #151515, #090909);
+        border: 1px solid #292929;
+        border-radius: 18px;
+        padding: 38px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+    }
+
+    .registro-icon {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: rgba(212, 175, 55, 0.10);
+        border: 1px solid rgba(212, 175, 55, 0.35);
+        font-size: 27px;
+    }
+
+    .registro-titulo {
+        text-align: center;
+        color: white;
+        font-size: 32px;
+        font-weight: 900;
+        margin-bottom: 8px;
+    }
+
+    .registro-titulo span {
+        color: #d4142d;
+    }
+
+    .registro-subtitulo {
+        text-align: center;
+        color: #888888;
+        font-size: 14px;
+        margin-bottom: 28px;
+    }
+
+    .campo {
+        margin-bottom: 17px;
+    }
+
+    .campo label {
+        display: block;
+        color: #dddddd;
+        font-size: 13px;
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    .campo input {
+        width: 100%;
+        background: #101010;
+        color: white;
+        border: 1px solid #303030;
+        border-radius: 8px;
+        padding: 12px;
+        outline: none;
+        font-size: 14px;
+    }
+
+    .campo input:focus {
+        border-color: #a30d20;
+        box-shadow: 0 0 0 3px rgba(163, 13, 32, 0.12);
+    }
+
+    .ayuda {
+        color: #666666;
+        font-size: 11px;
+        margin-top: 6px;
+        line-height: 1.5;
+    }
+
+    .errores {
+        color: #ef6978;
+        font-size: 12px;
+        margin-top: 6px;
+    }
+
+    .boton-registro {
+        width: 100%;
+        border: none;
+        background: #d4af37;
+        color: #080808;
+        padding: 13px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s ease;
+        margin-top: 8px;
+    }
+
+    .boton-registro:hover {
+        background: #f1d878;
+        transform: translateY(-1px);
+    }
+
+    .login-link {
+        text-align: center;
+        color: #777777;
+        font-size: 13px;
+        margin-top: 22px;
+    }
+
+    .login-link a {
+        color: #d4af37;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .login-link a:hover {
+        color: #f1d878;
+    }
+
+</style>
+
+
+<div class="registro-container">
+
+    <div class="registro-card">
+
+        <div class="registro-icon">
+            👤
+        </div>
+
+        <h1 class="registro-titulo">
+            Crear <span>cuenta</span>
+        </h1>
+
+        <p class="registro-subtitulo">
+            Regístrate para administrar los jugadores.
+        </p>
+
+
+        <form method="post">
+
+            {% csrf_token %}
+
+
+            <div class="campo">
+
+                <label for="{{ form.username.id_for_label }}">
+                    Usuario
+                </label>
+
+                {{ form.username }}
+
+                {% if form.username.errors %}
+                    <div class="errores">
+                        {{ form.username.errors }}
+                    </div>
+                {% endif %}
+
+                <div class="ayuda">
+                    {{ form.username.help_text }}
+                </div>
+
+            </div>
+
+
+            <div class="campo">
+
+                <label for="{{ form.password1.id_for_label }}">
+                    Contraseña
+                </label>
+
+                {{ form.password1 }}
+
+                {% if form.password1.errors %}
+                    <div class="errores">
+                        {{ form.password1.errors }}
+                    </div>
+                {% endif %}
+
+                <div class="ayuda">
+                    {{ form.password1.help_text }}
+                </div>
+
+            </div>
+
+
+            <div class="campo">
+
+                <label for="{{ form.password2.id_for_label }}">
+                    Confirmar contraseña
+                </label>
+
+                {{ form.password2 }}
+
+                {% if form.password2.errors %}
+                    <div class="errores">
+                        {{ form.password2.errors }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+            <button type="submit" class="boton-registro">
+                Crear cuenta
+            </button>
+
+        </form>
+
+
+        <p class="login-link">
+            ¿Ya tienes una cuenta?
+            <a href="{% url 'login' %}">
+                Inicia sesión
+            </a>
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}
+```

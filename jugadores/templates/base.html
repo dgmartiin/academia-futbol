@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}Academia de Fútbol{% endblock %}</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --negro: #070707;
+            --negro-suave: #101010;
+            --rojo: #a30d20;
+            --rojo-oscuro: #430812;
+            --rojo-brillante: #d4142d;
+            --dorado: #d4af37;
+            --dorado-claro: #f1d878;
+            --blanco: #f5f5f5;
+            --gris: #aaaaaa;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--blanco);
+            min-height: 100vh;
+
+            background:
+                radial-gradient(
+                    circle at 90% 10%,
+                    rgba(212, 175, 55, 0.13),
+                    transparent 18%
+                ),
+                radial-gradient(
+                    circle at 8% 35%,
+                    rgba(163, 13, 32, 0.28),
+                    transparent 28%
+                ),
+                linear-gradient(
+                    115deg,
+                    #050505 0%,
+                    #0a0a0a 43%,
+                    #26070b 43%,
+                    #5a0a15 68%,
+                    #0a0a0a 100%
+                );
+
+            background-attachment: fixed;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        header {
+            background: rgba(5, 5, 5, 0.94);
+            border-bottom: 2px solid var(--rojo);
+            padding: 20px 45px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+
+            position: sticky;
+            top: 0;
+            z-index: 100;
+
+            box-shadow:
+                0 5px 25px rgba(0, 0, 0, 0.6),
+                0 2px 15px rgba(163, 13, 32, 0.15);
+        }
+
+        .logo {
+            color: white;
+            text-decoration: none;
+            font-size: 25px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .logo span {
+            color: var(--rojo-brillante);
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            flex-wrap: wrap;
+        }
+
+        nav span {
+            color: #c8c8c8;
+            font-size: 14px;
+            margin-right: 8px;
+        }
+
+        nav a {
+            color: #dddddd;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 7px;
+            font-size: 14px;
+            transition: 0.2s ease;
+        }
+
+        nav a:hover {
+            color: white;
+            background: rgba(163, 13, 32, 0.25);
+        }
+
+        .boton-dorado {
+            background: var(--dorado);
+            color: #080808 !important;
+            font-weight: bold;
+
+            box-shadow:
+                0 4px 15px rgba(212, 175, 55, 0.2);
+        }
+
+        .boton-dorado:hover {
+            background: var(--dorado-claro) !important;
+            transform: translateY(-1px);
+        }
+
+        .boton-salir {
+            background: transparent;
+            border: 1px solid #444444;
+            color: #dddddd;
+
+            padding: 9px 15px;
+            border-radius: 7px;
+            font-size: 14px;
+            cursor: pointer;
+
+            transition: 0.2s ease;
+        }
+
+        .boton-salir:hover {
+            background: rgba(163, 13, 32, 0.25);
+            border-color: var(--rojo-brillante);
+            color: white;
+        }
+
+        /* =========================
+           CONTENIDO
+        ========================= */
+
+        main {
+            max-width: 1250px;
+            margin: 0 auto;
+            padding: 50px 25px;
+
+            min-height: calc(100vh - 150px);
+        }
+
+        /* =========================
+           MENSAJES
+        ========================= */
+
+        .mensaje {
+            background: rgba(212, 175, 55, 0.09);
+            border: 1px solid rgba(212, 175, 55, 0.45);
+
+            color: var(--dorado-claro);
+
+            padding: 15px 18px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            background: #050505;
+            border-top: 2px solid var(--rojo);
+
+            color: #888888;
+            text-align: center;
+
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        footer p {
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            header {
+                padding: 18px 20px;
+            }
+
+            .logo {
+                font-size: 21px;
+            }
+
+            nav {
+                width: 100%;
+            }
+
+            nav span {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+
+            main {
+                padding: 30px 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+
+        <a href="{% url 'jugador_list' %}" class="logo">
+            ⚽ Academia <span>de Fútbol</span>
+        </a>
+
+        <nav>
+
+            {% if user.is_authenticated %}
+
+                <span>Hola, {{ user.username }}</span>
+
+                <a href="{% url 'jugador_create' %}" class="boton-dorado">
+                    + Nuevo jugador
+                </a>
+
+                <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                    {% csrf_token %}
+
+                    <button type="submit" class="boton-salir">
+                        Salir
+                    </button>
+                </form>
+
+            {% else %}
+
+                <a href="{% url 'registro' %}">
+                    Registrarse
+                </a>
+
+                <a href="{% url 'login' %}">
+                    Iniciar sesión
+                </a>
+
+            {% endif %}
+
+        </nav>
+
+    </header>
+
+    <main>
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div class="mensaje">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+        {% block contenido %}
+        {% endblock %}
+
+    </main>
+
+    <footer>
+        <p>⚽ ACADEMIA DE FÚTBOL · PROYECTO DJANGO</p>
+    </footer>
+
+</body>
+</html>

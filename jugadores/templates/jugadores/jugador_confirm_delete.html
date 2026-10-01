@@ -1,0 +1,298 @@
+```html
+{% extends 'base.html' %}
+
+{% block title %}
+    Borrar jugador
+{% endblock %}
+
+{% block contenido %}
+
+<style>
+
+    .borrar-container {
+        max-width: 700px;
+        margin: 40px auto;
+    }
+
+    .borrar-card {
+        background: linear-gradient(
+            145deg,
+            #151515,
+            #090909
+        );
+
+        border: 1px solid #3a1016;
+        border-radius: 18px;
+
+        padding: 40px;
+
+        text-align: center;
+
+        box-shadow:
+            0 20px 50px rgba(0, 0, 0, 0.6);
+    }
+
+    .icono-borrar {
+        width: 65px;
+        height: 65px;
+
+        margin: 0 auto 20px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 50%;
+
+        background: rgba(163, 13, 32, 0.15);
+        border: 1px solid rgba(163, 13, 32, 0.45);
+
+        color: #d4142d;
+
+        font-size: 28px;
+    }
+
+    .borrar-titulo {
+        color: white;
+
+        font-size: 32px;
+        font-weight: 900;
+
+        margin-bottom: 10px;
+    }
+
+    .borrar-titulo span {
+        color: #d4142d;
+    }
+
+    .borrar-texto {
+        color: #999999;
+
+        font-size: 15px;
+        line-height: 1.6;
+
+        margin-bottom: 25px;
+    }
+
+    .jugador-preview {
+        display: flex;
+        align-items: center;
+
+        text-align: left;
+
+        background: #101010;
+        border: 1px solid #292929;
+
+        border-radius: 12px;
+
+        padding: 12px;
+
+        margin-bottom: 25px;
+    }
+
+    .jugador-preview img {
+        width: 80px;
+        height: 80px;
+
+        object-fit: cover;
+
+        border-radius: 8px;
+
+        margin-right: 15px;
+    }
+
+    .jugador-preview-info h2 {
+        color: white;
+
+        font-size: 18px;
+
+        margin-bottom: 6px;
+    }
+
+    .jugador-preview-info p {
+        color: #888888;
+
+        font-size: 13px;
+    }
+
+    .numero-preview {
+        color: #d4af37;
+        font-weight: bold;
+    }
+
+    .advertencia {
+        color: #ef6978;
+
+        background: rgba(163, 13, 32, 0.10);
+
+        border: 1px solid rgba(163, 13, 32, 0.30);
+
+        border-radius: 8px;
+
+        padding: 11px;
+
+        font-size: 12px;
+
+        margin-bottom: 25px;
+    }
+
+    .acciones-borrar {
+        display: flex;
+
+        justify-content: center;
+
+        gap: 12px;
+    }
+
+    .boton {
+        display: inline-block;
+
+        padding: 12px 22px;
+
+        border-radius: 8px;
+
+        font-size: 14px;
+        font-weight: bold;
+
+        text-decoration: none;
+
+        cursor: pointer;
+
+        transition: 0.2s ease;
+    }
+
+    .boton-cancelar {
+        background: #1c1c1c;
+
+        border: 1px solid #363636;
+
+        color: #dddddd;
+    }
+
+    .boton-cancelar:hover {
+        background: #292929;
+
+        color: white;
+    }
+
+    .boton-borrar {
+        background: #a30d20;
+
+        border: 1px solid #d4142d;
+
+        color: white;
+    }
+
+    .boton-borrar:hover {
+        background: #d4142d;
+
+        transform: translateY(-1px);
+    }
+
+    @media (max-width: 550px) {
+
+        .borrar-card {
+            padding: 25px 18px;
+        }
+
+        .borrar-titulo {
+            font-size: 27px;
+        }
+
+        .acciones-borrar {
+            flex-direction: column-reverse;
+        }
+
+        .boton {
+            width: 100%;
+        }
+
+    }
+
+</style>
+
+
+<div class="borrar-container">
+
+    <div class="borrar-card">
+
+        <div class="icono-borrar">
+            🗑
+        </div>
+
+
+        <h1 class="borrar-titulo">
+            ¿Borrar <span>jugador?</span>
+        </h1>
+
+
+        <p class="borrar-texto">
+            Estás a punto de eliminar este jugador de la academia.
+            Revisa la información antes de continuar.
+        </p>
+
+
+        <div class="jugador-preview">
+
+            <img
+                src="{{ jugador.url_imagen }}"
+                alt="Imagen de {{ jugador.nombre }}"
+            >
+
+            <div class="jugador-preview-info">
+
+                <h2>
+                    {{ jugador.nombre }}
+                </h2>
+
+                <p>
+                    {{ jugador.posicion }}
+                    ·
+                    {{ jugador.categoria }}
+                    ·
+                    <span class="numero-preview">
+                        #{{ jugador.numero }}
+                    </span>
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="advertencia">
+            ⚠ Esta acción no se puede deshacer.
+        </div>
+
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            <div class="acciones-borrar">
+
+                <a
+                    href="{% url 'jugador_detail' jugador.pk %}"
+                    class="boton boton-cancelar"
+                >
+                    Cancelar
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="boton boton-borrar"
+                >
+                    Sí, borrar jugador
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
+```

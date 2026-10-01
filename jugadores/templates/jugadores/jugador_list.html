@@ -1,0 +1,437 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Academia de Fútbol
+{% endblock %}
+
+{% block contenido %}
+
+<style>
+
+    .encabezado {
+        margin-bottom: 35px;
+    }
+
+    .encabezado-superior {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .titulo {
+        font-size: 42px;
+        font-weight: 800;
+        letter-spacing: -1px;
+        color: white;
+        margin-bottom: 8px;
+    }
+
+    .titulo span {
+        color: #d4142d;
+    }
+
+    .subtitulo {
+        color: #aaaaaa;
+        font-size: 16px;
+    }
+
+    .linea-roja {
+        width: 70px;
+        height: 4px;
+        background: #d4142d;
+        border-radius: 10px;
+        margin-top: 18px;
+    }
+
+    .contador {
+        background: rgba(0, 0, 0, 0.45);
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        padding: 12px 18px;
+        border-radius: 10px;
+        color: #d4af37;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    .jugadores-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 22px;
+    }
+
+    .jugador-card {
+        background: linear-gradient(
+            145deg,
+            #151515,
+            #0b0b0b
+        );
+
+        border: 1px solid #292929;
+        border-radius: 14px;
+        overflow: hidden;
+
+        box-shadow:
+            0 8px 25px rgba(0, 0, 0, 0.45);
+
+        transition:
+            transform 0.25s ease,
+            border-color 0.25s ease,
+            box-shadow 0.25s ease;
+    }
+
+    .jugador-card:hover {
+        transform: translateY(-6px);
+
+        border-color: #a30d20;
+
+        box-shadow:
+            0 15px 35px rgba(0, 0, 0, 0.6),
+            0 0 20px rgba(163, 13, 32, 0.18);
+    }
+
+    .imagen-container {
+        height: 260px;
+        position: relative;
+        overflow: hidden;
+        background: #111111;
+    }
+
+    .imagen-container::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+
+        background: linear-gradient(
+            to top,
+            rgba(0, 0, 0, 0.8),
+            transparent 45%
+        );
+    }
+
+    .jugador-imagen {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+
+        transition: transform 0.4s ease;
+    }
+
+    .jugador-card:hover .jugador-imagen {
+        transform: scale(1.06);
+    }
+
+    .numero {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+
+        z-index: 2;
+
+        background: #d4af37;
+        color: #080808;
+
+        width: 45px;
+        height: 45px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        border-radius: 50%;
+
+        font-size: 17px;
+        font-weight: 900;
+
+        box-shadow:
+            0 4px 12px rgba(0, 0, 0, 0.5);
+    }
+
+    .jugador-info {
+        padding: 20px;
+    }
+
+    .jugador-nombre {
+        color: white;
+        font-size: 21px;
+        font-weight: 800;
+        margin-bottom: 14px;
+    }
+
+    .datos {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin-bottom: 18px;
+    }
+
+    .etiqueta {
+        font-size: 12px;
+        padding: 6px 9px;
+        border-radius: 6px;
+
+        background: #202020;
+        color: #cccccc;
+
+        border: 1px solid #303030;
+    }
+
+    .etiqueta-posicion {
+        background: rgba(163, 13, 32, 0.16);
+        color: #ef6978;
+        border-color: rgba(163, 13, 32, 0.4);
+    }
+
+    .etiqueta-categoria {
+        background: rgba(212, 175, 55, 0.10);
+        color: #d4af37;
+        border-color: rgba(212, 175, 55, 0.3);
+    }
+
+    .ver-perfil {
+        display: block;
+        width: 100%;
+
+        text-align: center;
+        text-decoration: none;
+
+        background: #1c1c1c;
+        border: 1px solid #353535;
+
+        color: #eeeeee;
+
+        padding: 10px;
+        border-radius: 8px;
+
+        font-size: 14px;
+        font-weight: bold;
+
+        transition: 0.2s ease;
+    }
+
+    .ver-perfil:hover {
+        background: #a30d20;
+        border-color: #d4142d;
+        color: white;
+    }
+
+    /* PAGINACIÓN */
+
+    .paginacion {
+        margin-top: 40px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .pagina-boton {
+        text-decoration: none;
+
+        background: #151515;
+        border: 1px solid #303030;
+
+        color: #dddddd;
+
+        padding: 10px 17px;
+        border-radius: 8px;
+
+        font-size: 14px;
+        transition: 0.2s ease;
+    }
+
+    .pagina-boton:hover {
+        background: #a30d20;
+        border-color: #d4142d;
+        color: white;
+    }
+
+    .pagina-actual {
+        color: #999999;
+        font-size: 14px;
+    }
+
+    /* SIN JUGADORES */
+
+    .sin-jugadores {
+        background: rgba(10, 10, 10, 0.8);
+        border: 1px solid #292929;
+        border-radius: 14px;
+        padding: 50px;
+        text-align: center;
+        color: #999999;
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 1050px) {
+        .jugadores-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    @media (max-width: 800px) {
+        .jugadores-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .titulo {
+            font-size: 34px;
+        }
+    }
+
+    @media (max-width: 550px) {
+        .jugadores-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .imagen-container {
+            height: 300px;
+        }
+    }
+
+</style>
+
+
+<section class="encabezado">
+
+    <div class="encabezado-superior">
+
+        <div>
+
+            <h1 class="titulo">
+                Academia <span>de Fútbol</span>
+            </h1>
+
+            <p class="subtitulo">
+                Conoce a nuestros jugadores y talentos de la academia.
+            </p>
+
+            <div class="linea-roja"></div>
+
+        </div>
+
+        <div class="contador">
+            ⚽ Talentos de la academia
+        </div>
+
+    </div>
+
+</section>
+
+
+{% if jugadores %}
+
+    <section class="jugadores-grid">
+
+        {% for jugador in jugadores %}
+
+            <article class="jugador-card">
+
+                <div class="imagen-container">
+
+                    <img
+                        src="{{ jugador.url_imagen }}"
+                        alt="Imagen de {{ jugador.nombre }}"
+                        class="jugador-imagen"
+                    >
+
+                    <div class="numero">
+                        #{{ jugador.numero }}
+                    </div>
+
+                </div>
+
+
+                <div class="jugador-info">
+
+                    <h2 class="jugador-nombre">
+                        {{ jugador.nombre }}
+                    </h2>
+
+                    <div class="datos">
+
+                        <span class="etiqueta etiqueta-posicion">
+                            {{ jugador.posicion }}
+                        </span>
+
+                        <span class="etiqueta etiqueta-categoria">
+                            {{ jugador.categoria }}
+                        </span>
+
+                        <span class="etiqueta">
+                            {{ jugador.nacionalidad }}
+                        </span>
+
+                    </div>
+
+                    <a
+                        href="{% url 'jugador_detail' jugador.pk %}"
+                        class="ver-perfil"
+                    >
+                        Ver perfil →
+                    </a>
+
+                </div>
+
+            </article>
+
+        {% endfor %}
+
+    </section>
+
+
+    {% if is_paginated %}
+
+        <div class="paginacion">
+
+            {% if page_obj.has_previous %}
+
+                <a
+                    href="?page={{ page_obj.previous_page_number }}"
+                    class="pagina-boton"
+                >
+                    ← Anterior
+                </a>
+
+            {% endif %}
+
+
+            <span class="pagina-actual">
+                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+            </span>
+
+
+            {% if page_obj.has_next %}
+
+                <a
+                    href="?page={{ page_obj.next_page_number }}"
+                    class="pagina-boton"
+                >
+                    Siguiente →
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    {% endif %}
+
+
+{% else %}
+
+    <div class="sin-jugadores">
+
+        <h2>No hay jugadores disponibles</h2>
+
+        <p>
+            Actualmente no hay jugadores activos en la academia.
+        </p>
+
+    </div>
+
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,550 @@
+```html
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if object %}
+        Editar jugador
+    {% else %}
+        Nuevo jugador
+    {% endif %}
+{% endblock %}
+
+{% block contenido %}
+
+<style>
+
+    .formulario-container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .formulario-header {
+        margin-bottom: 30px;
+    }
+
+    .formulario-titulo {
+        font-size: 40px;
+        font-weight: 900;
+        color: white;
+        margin-bottom: 8px;
+    }
+
+    .formulario-titulo span {
+        color: #d4142d;
+    }
+
+    .formulario-subtitulo {
+        color: #999999;
+        font-size: 15px;
+    }
+
+    .linea-roja {
+        width: 65px;
+        height: 4px;
+        background: #d4142d;
+        border-radius: 10px;
+        margin-top: 16px;
+    }
+
+    .formulario-card {
+        background: linear-gradient(
+            145deg,
+            #151515,
+            #090909
+        );
+
+        border: 1px solid #292929;
+        border-radius: 16px;
+
+        padding: 35px;
+
+        box-shadow:
+            0 15px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .campos-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22px;
+    }
+
+    .campo {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .campo-completo {
+        grid-column: 1 / -1;
+    }
+
+    .campo label {
+        color: #dddddd;
+        font-size: 13px;
+        font-weight: bold;
+
+        margin-bottom: 8px;
+    }
+
+    .campo input,
+    .campo select,
+    .campo textarea {
+        width: 100%;
+
+        background: #101010;
+        color: #eeeeee;
+
+        border: 1px solid #303030;
+        border-radius: 8px;
+
+        padding: 12px 13px;
+
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+
+        outline: none;
+
+        transition: 0.2s ease;
+    }
+
+    .campo input:focus,
+    .campo select:focus,
+    .campo textarea:focus {
+        border-color: #a30d20;
+
+        box-shadow:
+            0 0 0 3px rgba(163, 13, 32, 0.12);
+    }
+
+    .campo textarea {
+        min-height: 130px;
+        resize: vertical;
+    }
+
+    .campo input::placeholder,
+    .campo textarea::placeholder {
+        color: #666666;
+    }
+
+    .ayuda {
+        color: #666666;
+        font-size: 11px;
+        margin-top: 6px;
+    }
+
+    .errores {
+        background: rgba(163, 13, 32, 0.12);
+
+        border: 1px solid rgba(163, 13, 32, 0.45);
+
+        color: #ef6978;
+
+        border-radius: 8px;
+
+        padding: 12px 15px;
+
+        margin-top: 7px;
+
+        font-size: 12px;
+    }
+
+    .errores ul {
+        margin: 0;
+        padding-left: 18px;
+    }
+
+    .checkbox-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        background: #101010;
+
+        border: 1px solid #303030;
+
+        padding: 13px;
+
+        border-radius: 8px;
+    }
+
+    .checkbox-container input {
+        width: auto;
+        accent-color: #d4142d;
+    }
+
+    .checkbox-container label {
+        margin: 0;
+        cursor: pointer;
+    }
+
+    .vista-previa {
+        margin-top: 10px;
+
+        background: #101010;
+        border: 1px dashed #333333;
+
+        border-radius: 10px;
+
+        padding: 12px;
+
+        text-align: center;
+    }
+
+    .vista-previa img {
+        max-width: 220px;
+        max-height: 180px;
+
+        border-radius: 8px;
+
+        object-fit: cover;
+    }
+
+    .vista-previa-texto {
+        color: #666666;
+        font-size: 11px;
+        margin-bottom: 8px;
+    }
+
+    .acciones-formulario {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+
+        margin-top: 30px;
+
+        padding-top: 25px;
+
+        border-top: 1px solid #242424;
+    }
+
+    .boton {
+        display: inline-block;
+
+        text-decoration: none;
+
+        border: none;
+
+        padding: 12px 20px;
+
+        border-radius: 8px;
+
+        font-size: 14px;
+        font-weight: bold;
+
+        cursor: pointer;
+
+        transition: 0.2s ease;
+    }
+
+    .boton-cancelar {
+        background: #1c1c1c;
+
+        border: 1px solid #363636;
+
+        color: #dddddd;
+    }
+
+    .boton-cancelar:hover {
+        background: #292929;
+        color: white;
+    }
+
+    .boton-guardar {
+        background: #d4af37;
+        color: #080808;
+
+        box-shadow:
+            0 4px 15px rgba(212, 175, 55, 0.15);
+    }
+
+    .boton-guardar:hover {
+        background: #f1d878;
+        transform: translateY(-1px);
+    }
+
+    @media (max-width: 700px) {
+
+        .campos-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .campo-completo {
+            grid-column: auto;
+        }
+
+        .formulario-card {
+            padding: 22px;
+        }
+
+        .formulario-titulo {
+            font-size: 32px;
+        }
+
+        .acciones-formulario {
+            flex-direction: column-reverse;
+        }
+
+        .boton {
+            width: 100%;
+            text-align: center;
+        }
+
+    }
+
+</style>
+
+
+<div class="formulario-container">
+
+    <div class="formulario-header">
+
+        <h1 class="formulario-titulo">
+
+            {% if object %}
+                Editar <span>jugador</span>
+            {% else %}
+                Nuevo <span>jugador</span>
+            {% endif %}
+
+        </h1>
+
+        <p class="formulario-subtitulo">
+            {% if object %}
+                Actualiza la información del jugador.
+            {% else %}
+                Registra un nuevo talento en la academia.
+            {% endif %}
+        </p>
+
+        <div class="linea-roja"></div>
+
+    </div>
+
+
+    <div class="formulario-card">
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+
+                <div class="errores">
+                    {{ form.non_field_errors }}
+                </div>
+
+            {% endif %}
+
+
+            <div class="campos-grid">
+
+
+                <!-- NOMBRE -->
+
+                <div class="campo campo-completo">
+
+                    <label for="{{ form.nombre.id_for_label }}">
+                        Nombre del jugador
+                    </label>
+
+                    {{ form.nombre }}
+
+                    {% if form.nombre.errors %}
+                        <div class="errores">
+                            {{ form.nombre.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <!-- NUMERO -->
+
+                <div class="campo">
+
+                    <label for="{{ form.numero.id_for_label }}">
+                        Número
+                    </label>
+
+                    {{ form.numero }}
+
+                    {% if form.numero.errors %}
+                        <div class="errores">
+                            {{ form.numero.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <!-- POSICIÓN -->
+
+                <div class="campo">
+
+                    <label for="{{ form.posicion.id_for_label }}">
+                        Posición
+                    </label>
+
+                    {{ form.posicion }}
+
+                    {% if form.posicion.errors %}
+                        <div class="errores">
+                            {{ form.posicion.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <!-- CATEGORÍA -->
+
+                <div class="campo">
+
+                    <label for="{{ form.categoria.id_for_label }}">
+                        Categoría
+                    </label>
+
+                    {{ form.categoria }}
+
+                    {% if form.categoria.errors %}
+                        <div class="errores">
+                            {{ form.categoria.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <!-- NACIONALIDAD -->
+
+                <div class="campo">
+
+                    <label for="{{ form.nacionalidad.id_for_label }}">
+                        Nacionalidad
+                    </label>
+
+                    {{ form.nacionalidad }}
+
+                    {% if form.nacionalidad.errors %}
+                        <div class="errores">
+                            {{ form.nacionalidad.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <!-- URL IMAGEN -->
+
+                <div class="campo campo-completo">
+
+                    <label for="{{ form.url_imagen.id_for_label }}">
+                        URL de la imagen
+                    </label>
+
+                    {{ form.url_imagen }}
+
+                    <span class="ayuda">
+                        La URL debe comenzar con https://
+                    </span>
+
+                    {% if form.url_imagen.errors %}
+                        <div class="errores">
+                            {{ form.url_imagen.errors }}
+                        </div>
+                    {% endif %}
+
+                    {% if object and object.url_imagen %}
+
+                        <div class="vista-previa">
+
+                            <div class="vista-previa-texto">
+                                Imagen actual
+                            </div>
+
+                            <img
+                                src="{{ object.url_imagen }}"
+                                alt="Imagen actual"
+                            >
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- DESCRIPCIÓN -->
+
+                <div class="campo campo-completo">
+
+                    <label for="{{ form.descripcion.id_for_label }}">
+                        Descripción
+                    </label>
+
+                    {{ form.descripcion }}
+
+                    {% if form.descripcion.errors %}
+                        <div class="errores">
+                            {{ form.descripcion.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <!-- ACTIVO -->
+
+                <div class="campo campo-completo">
+
+                    <div class="checkbox-container">
+
+                        {{ form.activo }}
+
+                        <label for="{{ form.activo.id_for_label }}">
+                            Jugador activo en la academia
+                        </label>
+
+                    </div>
+
+                    {% if form.activo.errors %}
+                        <div class="errores">
+                            {{ form.activo.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+            </div>
+
+
+            <div class="acciones-formulario">
+
+                <a
+                    href="{% if object %}{% url 'jugador_detail' object.pk %}{% else %}{% url 'jugador_list' %}{% endif %}"
+                    class="boton boton-cancelar"
+                >
+                    Cancelar
+                </a>
+
+                <button
+                    type="submit"
+                    class="boton boton-guardar"
+                >
+                    {% if object %}
+                        Guardar cambios
+                    {% else %}
+                        Guardar jugador
+                    {% endif %}
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
+```

@@ -1,0 +1,514 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ jugador.nombre }} | Academia de Fútbol
+{% endblock %}
+
+{% block contenido %}
+
+<style>
+
+    .perfil-container {
+        max-width: 1050px;
+        margin: 0 auto;
+    }
+
+    .perfil-card {
+        display: grid;
+        grid-template-columns: 43% 57%;
+
+        background: linear-gradient(
+            145deg,
+            #151515,
+            #090909
+        );
+
+        border: 1px solid #292929;
+        border-radius: 18px;
+        overflow: hidden;
+
+        box-shadow:
+            0 20px 50px rgba(0, 0, 0, 0.55);
+    }
+
+    /* IMAGEN */
+
+    .perfil-imagen-container {
+        min-height: 580px;
+        position: relative;
+        overflow: hidden;
+        background: #111111;
+    }
+
+    .perfil-imagen-container::after {
+        content: "";
+
+        position: absolute;
+        inset: 0;
+
+        background: linear-gradient(
+            to top,
+            rgba(0, 0, 0, 0.85),
+            transparent 55%
+        );
+    }
+
+    .perfil-imagen {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+
+        transition: transform 0.5s ease;
+    }
+
+    .perfil-card:hover .perfil-imagen {
+        transform: scale(1.03);
+    }
+
+    .numero-grande {
+        position: absolute;
+
+        bottom: 25px;
+        left: 25px;
+
+        z-index: 2;
+
+        font-size: 75px;
+        font-weight: 900;
+
+        color: #d4af37;
+
+        text-shadow:
+            0 5px 20px rgba(0, 0, 0, 0.8);
+    }
+
+    /* INFORMACIÓN */
+
+    .perfil-info {
+        padding: 45px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .perfil-etiqueta {
+        display: inline-block;
+
+        width: fit-content;
+
+        color: #d4142d;
+        font-size: 13px;
+        font-weight: bold;
+
+        text-transform: uppercase;
+        letter-spacing: 2px;
+
+        margin-bottom: 12px;
+    }
+
+    .perfil-nombre {
+        color: white;
+
+        font-size: 42px;
+        line-height: 1.05;
+
+        margin-bottom: 12px;
+
+        font-weight: 900;
+    }
+
+    .perfil-linea {
+        width: 65px;
+        height: 4px;
+
+        background: #d4142d;
+
+        border-radius: 10px;
+
+        margin-bottom: 30px;
+    }
+
+    .datos-perfil {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+
+        gap: 14px;
+
+        margin-bottom: 30px;
+    }
+
+    .dato {
+        background: #111111;
+
+        border: 1px solid #292929;
+
+        border-radius: 10px;
+
+        padding: 15px;
+    }
+
+    .dato-titulo {
+        display: block;
+
+        color: #777777;
+
+        font-size: 11px;
+        text-transform: uppercase;
+
+        letter-spacing: 1px;
+
+        margin-bottom: 6px;
+    }
+
+    .dato-valor {
+        color: #eeeeee;
+
+        font-size: 15px;
+        font-weight: bold;
+    }
+
+    .dato-valor.dorado {
+        color: #d4af37;
+    }
+
+    .descripcion-titulo {
+        color: #d4af37;
+
+        font-size: 13px;
+        text-transform: uppercase;
+
+        letter-spacing: 1px;
+
+        margin-bottom: 10px;
+    }
+
+    .descripcion {
+        color: #aaaaaa;
+
+        font-size: 15px;
+        line-height: 1.7;
+
+        margin-bottom: 25px;
+    }
+
+    .estado {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+
+        width: fit-content;
+
+        background: rgba(35, 150, 75, 0.12);
+        border: 1px solid rgba(35, 150, 75, 0.35);
+
+        color: #62d88a;
+
+        padding: 7px 12px;
+
+        border-radius: 7px;
+
+        font-size: 12px;
+        font-weight: bold;
+
+        margin-bottom: 25px;
+    }
+
+    .estado-punto {
+        width: 7px;
+        height: 7px;
+
+        background: #62d88a;
+
+        border-radius: 50%;
+    }
+
+    .estado-inactivo {
+        background: rgba(163, 13, 32, 0.12);
+        border-color: rgba(163, 13, 32, 0.35);
+        color: #ef6978;
+    }
+
+    .estado-inactivo .estado-punto {
+        background: #d4142d;
+    }
+
+    /* BOTONES */
+
+    .acciones {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .boton {
+        display: inline-block;
+
+        text-decoration: none;
+
+        padding: 11px 18px;
+
+        border-radius: 8px;
+
+        font-size: 14px;
+        font-weight: bold;
+
+        transition: 0.2s ease;
+    }
+
+    .boton-volver {
+        background: #1c1c1c;
+
+        border: 1px solid #363636;
+
+        color: #dddddd;
+    }
+
+    .boton-volver:hover {
+        background: #292929;
+        color: white;
+    }
+
+    .boton-editar {
+        background: #d4af37;
+
+        color: #080808;
+    }
+
+    .boton-editar:hover {
+        background: #f1d878;
+        transform: translateY(-1px);
+    }
+
+    .boton-borrar {
+        background: transparent;
+
+        border: 1px solid #7c1725;
+
+        color: #ef6978;
+    }
+
+    .boton-borrar:hover {
+        background: #a30d20;
+        border-color: #d4142d;
+        color: white;
+    }
+
+    .autor {
+        color: #666666;
+
+        font-size: 12px;
+
+        margin-top: 20px;
+    }
+
+    .autor strong {
+        color: #999999;
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 800px) {
+
+        .perfil-card {
+            grid-template-columns: 1fr;
+        }
+
+        .perfil-imagen-container {
+            min-height: 400px;
+            height: 400px;
+        }
+
+        .perfil-info {
+            padding: 30px;
+        }
+
+        .perfil-nombre {
+            font-size: 34px;
+        }
+
+    }
+
+    @media (max-width: 500px) {
+
+        .datos-perfil {
+            grid-template-columns: 1fr;
+        }
+
+        .perfil-imagen-container {
+            height: 350px;
+            min-height: 350px;
+        }
+
+        .perfil-info {
+            padding: 22px;
+        }
+
+        .perfil-nombre {
+            font-size: 30px;
+        }
+
+    }
+
+</style>
+
+
+<div class="perfil-container">
+
+    <div class="perfil-card">
+
+        <!-- IMAGEN -->
+
+        <div class="perfil-imagen-container">
+
+            <img
+                src="{{ jugador.url_imagen }}"
+                alt="Imagen de {{ jugador.nombre }}"
+                class="perfil-imagen"
+            >
+
+            <div class="numero-grande">
+                #{{ jugador.numero }}
+            </div>
+
+        </div>
+
+
+        <!-- INFORMACIÓN -->
+
+        <div class="perfil-info">
+
+            <span class="perfil-etiqueta">
+                Jugador de la academia
+            </span>
+
+            <h1 class="perfil-nombre">
+                {{ jugador.nombre }}
+            </h1>
+
+            <div class="perfil-linea"></div>
+
+
+            <div class="datos-perfil">
+
+                <div class="dato">
+
+                    <span class="dato-titulo">
+                        Posición
+                    </span>
+
+                    <span class="dato-valor">
+                        {{ jugador.posicion }}
+                    </span>
+
+                </div>
+
+
+                <div class="dato">
+
+                    <span class="dato-titulo">
+                        Categoría
+                    </span>
+
+                    <span class="dato-valor dorado">
+                        {{ jugador.categoria }}
+                    </span>
+
+                </div>
+
+
+                <div class="dato">
+
+                    <span class="dato-titulo">
+                        Nacionalidad
+                    </span>
+
+                    <span class="dato-valor">
+                        {{ jugador.nacionalidad }}
+                    </span>
+
+                </div>
+
+
+                <div class="dato">
+
+                    <span class="dato-titulo">
+                        Número
+                    </span>
+
+                    <span class="dato-valor dorado">
+                        #{{ jugador.numero }}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <h3 class="descripcion-titulo">
+                Sobre el jugador
+            </h3>
+
+            <p class="descripcion">
+                {{ jugador.descripcion }}
+            </p>
+
+
+            {% if jugador.activo %}
+
+                <div class="estado">
+                    <span class="estado-punto"></span>
+                    Jugador activo
+                </div>
+
+            {% else %}
+
+                <div class="estado estado-inactivo">
+                    <span class="estado-punto"></span>
+                    Jugador inactivo
+                </div>
+
+            {% endif %}
+
+
+            <div class="acciones">
+
+                <a
+                    href="{% url 'jugador_list' %}"
+                    class="boton boton-volver"
+                >
+                    ← Volver
+                </a>
+
+
+                {% if user.is_authenticated %}
+
+                    <a
+                        href="{% url 'jugador_update' jugador.pk %}"
+                        class="boton boton-editar"
+                    >
+                        ✎ Editar
+                    </a>
+
+                    <a
+                        href="{% url 'jugador_delete' jugador.pk %}"
+                        class="boton boton-borrar"
+                    >
+                        🗑 Borrar
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+
+            <p class="autor">
+                Registrado por <strong>{{ jugador.autor.username }}</strong>
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

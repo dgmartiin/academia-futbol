@@ -1,0 +1,203 @@
+```html
+{% extends 'base.html' %}
+
+{% block title %}
+    Iniciar sesión
+{% endblock %}
+
+{% block contenido %}
+
+<style>
+
+    .login-container {
+        max-width: 450px;
+        margin: 40px auto;
+    }
+
+    .login-card {
+        background: linear-gradient(145deg, #151515, #090909);
+        border: 1px solid #292929;
+        border-radius: 18px;
+        padding: 38px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+    }
+
+    .login-icon {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: rgba(163, 13, 32, 0.15);
+        border: 1px solid rgba(163, 13, 32, 0.4);
+        font-size: 27px;
+    }
+
+    .login-titulo {
+        text-align: center;
+        color: white;
+        font-size: 32px;
+        font-weight: 900;
+        margin-bottom: 8px;
+    }
+
+    .login-titulo span {
+        color: #d4142d;
+    }
+
+    .login-subtitulo {
+        text-align: center;
+        color: #888888;
+        font-size: 14px;
+        margin-bottom: 28px;
+    }
+
+    .campo {
+        margin-bottom: 18px;
+    }
+
+    .campo label {
+        display: block;
+        color: #dddddd;
+        font-size: 13px;
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    .campo input {
+        width: 100%;
+        background: #101010;
+        color: white;
+        border: 1px solid #303030;
+        border-radius: 8px;
+        padding: 12px;
+        outline: none;
+        font-size: 14px;
+    }
+
+    .campo input:focus {
+        border-color: #a30d20;
+        box-shadow: 0 0 0 3px rgba(163, 13, 32, 0.12);
+    }
+
+    .errores {
+        background: rgba(163, 13, 32, 0.12);
+        border: 1px solid rgba(163, 13, 32, 0.4);
+        color: #ef6978;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 13px;
+        margin-bottom: 18px;
+    }
+
+    .boton-login {
+        width: 100%;
+        border: none;
+        background: #d4af37;
+        color: #080808;
+        padding: 13px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s ease;
+    }
+
+    .boton-login:hover {
+        background: #f1d878;
+        transform: translateY(-1px);
+    }
+
+    .registro-link {
+        text-align: center;
+        color: #777777;
+        font-size: 13px;
+        margin-top: 22px;
+    }
+
+    .registro-link a {
+        color: #d4af37;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .registro-link a:hover {
+        color: #f1d878;
+    }
+
+</style>
+
+
+<div class="login-container">
+
+    <div class="login-card">
+
+        <div class="login-icon">
+            ⚽
+        </div>
+
+        <h1 class="login-titulo">
+            Iniciar <span>sesión</span>
+        </h1>
+
+        <p class="login-subtitulo">
+            Accede a la administración de la academia.
+        </p>
+
+
+        {% if form.errors %}
+            <div class="errores">
+                Usuario o contraseña incorrectos.
+                Inténtalo nuevamente.
+            </div>
+        {% endif %}
+
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            <div class="campo">
+
+                <label for="{{ form.username.id_for_label }}">
+                    Usuario
+                </label>
+
+                {{ form.username }}
+
+            </div>
+
+
+            <div class="campo">
+
+                <label for="{{ form.password.id_for_label }}">
+                    Contraseña
+                </label>
+
+                {{ form.password }}
+
+            </div>
+
+
+            <button type="submit" class="boton-login">
+                Iniciar sesión
+            </button>
+
+        </form>
+
+
+        <p class="registro-link">
+            ¿No tienes una cuenta?
+            <a href="{% url 'registro' %}">
+                Regístrate aquí
+            </a>
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}
+```
